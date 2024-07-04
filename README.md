@@ -1,3 +1,147 @@
+# What are the React Hooks
+
+React Hooks are functions that let you use state and other React features without writing a class. They were introduced in React 16.8 to provide a more direct API for managing stateful logic within functional components. Before hooks, state management and lifecycle methods were primarily handled by class components. Here are some of the core React Hooks:
+
+1. **useState:**
+   - Allows functional components to have local state. It returns a stateful value and a function to update it.
+   
+   ```jsx
+   import React, { useState } from 'react';
+
+   function Counter() {
+     const [count, setCount] = useState(0);
+
+     return (
+       <div>
+         <p>You clicked {count} times</p>
+         <button onClick={() => setCount(count + 1)}>Click me</button>
+       </div>
+     );
+   }
+   ```
+
+2. **useEffect:**
+   - Allows performing side effects in functional components. It serves the same purpose as `componentDidMount`, `componentDidUpdate`, and `componentWillUnmount` in class components.
+
+   ```jsx
+   import React, { useState, useEffect } from 'react';
+
+   function Example() {
+     const [count, setCount] = useState(0);
+
+     useEffect(() => {
+       document.title = `You clicked ${count} times`;
+     });
+
+     return (
+       <div>
+         <p>You clicked {count} times</p>
+         <button onClick={() => setCount(count + 1)}>
+           Click me
+         </button>
+       </div>
+     );
+   }
+   ```
+
+3. **useContext:**
+   - Accepts a context object (created with `React.createContext`) and returns the current context value for that context.
+
+   ```jsx
+   import React, { useContext } from 'react';
+   import ThemeContext from './ThemeContext';
+
+   function ThemedButton() {
+     const theme = useContext(ThemeContext);
+
+     return (
+       <button style={{ background: theme.background, color: theme.foreground }}>
+         I am styled by theme context!
+       </button>
+     );
+   }
+   ```
+
+4. **useReducer:**
+   - An alternative to `useState`. Accepts a reducer of type `(state, action) => newState`, and returns the current state paired with a `dispatch` method.
+
+   ```jsx
+   import React, { useReducer } from 'react';
+
+   const initialState = { count: 0 };
+
+   function reducer(state, action) {
+     switch (action.type) {
+       case 'increment':
+         return { count: state.count + 1 };
+       case 'decrement':
+         return { count: state.count - 1 };
+       default:
+         throw new Error();
+     }
+   }
+
+   function Counter() {
+     const [state, dispatch] = useReducer(reducer, initialState);
+
+     return (
+       <div>
+         Count: {state.count}
+         <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+         <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+       </div>
+     );
+   }
+   ```
+
+5. **useRef:**
+   - Returns a mutable ref object whose `.current` property is initialized to the passed argument (initialValue). The returned object will persist for the full lifetime of the component.
+
+   ```jsx
+   import React, { useRef } from 'react';
+
+   function TextInputWithFocusButton() {
+     const inputEl = useRef(null);
+     const onButtonClick = () => {
+       inputEl.current.focus();
+     };
+
+     return (
+       <div>
+         <input ref={inputEl} type="text" />
+         <button onClick={onButtonClick}>Focus the input</button>
+       </div>
+     );
+   }
+   ```
+
+6. **Custom Hooks:**
+   - Hooks can also be used to create custom hooks, which are JavaScript functions whose names start with `use` and may call other hooks. Custom hooks allow you to extract component logic into reusable functions.
+
+   ```jsx
+   import React, { useState, useEffect } from 'react';
+
+   function useDocumentTitle(title) {
+     useEffect(() => {
+       document.title = title;
+     }, [title]);
+   }
+
+   function Example() {
+     const [count, setCount] = useState(0);
+     useDocumentTitle(`You clicked ${count} times`);
+
+     return (
+       <div>
+         <p>You clicked {count} times</p>
+         <button onClick={() => setCount(count + 1)}>Click me</button>
+       </div>
+     );
+   }
+   ```
+
+React Hooks have significantly simplified the process of managing state and side effects in functional components, making them more powerful and easier to read and maintain compared to traditional class components. They encourage the separation of concerns and improve code reuse in React applications.
+
 # Explain react useEffect
 
 `useEffect` is a React Hook that lets you synchronize a component with an external system. Side effects can include data fetching, setting up subscriptions, or manually changing the DOM in React components.
